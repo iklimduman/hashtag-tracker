@@ -9,10 +9,16 @@
     "d3-fetch": "^3.0.1",
     "d3-scale": "^4.0.2",
     "deck.gl": "^8.7.5",
+    "dotenv": "^16.0.0",
+    "got": "^12.0.3",
+    "needle": "^3.1.0",
+    "oauth-1.0a": "^2.2.6",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-scripts": "5.0.1",
     "react-simple-maps": "^2.3.0",
+    "react-tooltip": "^4.2.21",
+    "twit": "^2.2.11",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
