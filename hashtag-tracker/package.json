@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.0.1",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.26.1",
     "d3-fetch": "^3.0.1",
     "d3-scale": "^4.0.2",
     "deck.gl": "^8.7.5",
@@ -19,6 +20,7 @@
     "react-simple-maps": "^2.3.0",
     "react-tooltip": "^4.2.21",
     "twit": "^2.2.11",
+    "twitter-woeid": "^1.0.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { getSingleWOEID } from "twitter-woeid";
 import { csv } from "d3-fetch";
 import { scaleLinear } from "d3-scale";
 import {
@@ -8,11 +9,8 @@ import {
     Sphere,
     Graticule
 } from "react-simple-maps";
-
+import axios from "axios";
 import { ZoomableGroup } from "react-simple-maps";
-
-import * as Twit from "twit" ;
-
 
 const geoUrl =
     "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
@@ -41,6 +39,36 @@ const WorldMap = ({ setTooltipContent }) => {
         console.log(countryName);
     }
 
+    const getTrend = async (_id) => {
+        try{
+            const res = await axios.get(`http://localhost:3001/api/trend/${_id}`) ;
+            return res.data ;
+        }
+        catch(err){
+            console.log(err) ;
+        }
+    }
+
+    const handleMouseEnter = (properties) => {
+        //setTooltipContent(properties.NAME);
+        console.log(properties) ;
+        var woeid = [] ;
+        woeid = getSingleWOEID(properties.NAME);
+        
+        if(woeid.length == 0){
+            woeid = getSingleWOEID(properties.NAME_LONG)
+        }
+
+        if(woeid[0].woeid){
+            getTrend(woeid[0].woeid).then((data) => setTooltipContent(data[0].name));
+        }
+        else{
+            setTooltipContent("No data available for this location")
+        }
+        console.log(woeid[0].woeid) ;
+
+    }
+
     return (
         <div style={{ marginLeft: "auto", marginRight: "auto", fontSize: "1.25rem" }} data-tip="">
 
@@ -59,13 +87,16 @@ const WorldMap = ({ setTooltipContent }) => {
                         <Geographies geography={geoUrl}>
                             {({ geographies }) =>
                                 geographies.map((geo) => {
+                                    console.log(geo.properties) ;
+                                    
                                     return (
                                         <Geography
                                             onClick={() => handleCountyClick(geo.properties.ISO_A3)}
                                             key={geo.rsmKey}
                                             geography={geo}
                                             onMouseEnter={() => {
-                                                setTooltipContent(`${geo.properties.NAME}`);
+                                                handleMouseEnter(geo.properties) ;
+                                                //setTooltipContent(`${geo.properties.NAME}`);
                                             }}
                                             onMouseLeave={() => {
                                                 setTooltipContent("")
