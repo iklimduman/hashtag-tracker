@@ -35,38 +35,35 @@ const WorldMap = ({ setTooltipContent }) => {
         });
     }, []);
 
-    const handleCountyClick = (countryName) => {
-        console.log(countryName);
+    const handleCountyClick = (properties) => {
+        var woeid = [];
+        woeid = getSingleWOEID(properties.NAME);
+
+        if (woeid.length == 0) {
+            woeid = getSingleWOEID(properties.NAME_LONG)
+        }
+
+        if (woeid[0].woeid) {
+            getTrend(woeid[0].woeid).then((data) => console.log(data));
+            //getTrend(woeid[0].woeid).then((data) => console.log(data[0].name));
+        }
+        else {
+            setTooltipContent("No data available for this location")
+        }
     }
 
     const getTrend = async (_id) => {
-        try{
-            const res = await axios.get(`http://localhost:3001/api/trend/${_id}`) ;
-            return res.data ;
+        try {
+            const res = await axios.get(`http://localhost:3001/api/trend/${_id}`);
+            return res.data;
         }
-        catch(err){
-            console.log(err) ;
+        catch (err) {
+            console.log(err);
         }
     }
 
     const handleMouseEnter = (properties) => {
-        //setTooltipContent(properties.NAME);
-        console.log(properties) ;
-        var woeid = [] ;
-        woeid = getSingleWOEID(properties.NAME);
-        
-        if(woeid.length == 0){
-            woeid = getSingleWOEID(properties.NAME_LONG)
-        }
-
-        if(woeid[0].woeid){
-            getTrend(woeid[0].woeid).then((data) => setTooltipContent(data[0].name));
-        }
-        else{
-            setTooltipContent("No data available for this location")
-        }
-        console.log(woeid[0].woeid) ;
-
+        setTooltipContent(properties.NAME);
     }
 
     return (
@@ -87,20 +84,20 @@ const WorldMap = ({ setTooltipContent }) => {
                         <Geographies geography={geoUrl}>
                             {({ geographies }) =>
                                 geographies.map((geo) => {
-                                    console.log(geo.properties) ;
-                                    
+
                                     return (
                                         <Geography
-                                            onClick={() => handleCountyClick(geo.properties.ISO_A3)}
+                                            onClick={() => handleCountyClick(geo.properties)}
                                             key={geo.rsmKey}
                                             geography={geo}
                                             onMouseEnter={() => {
-                                                handleMouseEnter(geo.properties) ;
+                                                handleMouseEnter(geo.properties);
                                                 //setTooltipContent(`${geo.properties.NAME}`);
                                             }}
                                             onMouseLeave={() => {
                                                 setTooltipContent("")
                                             }}
+
                                             style={{
                                                 default: {
                                                     fill: "#122330",
@@ -131,7 +128,7 @@ const WorldMap = ({ setTooltipContent }) => {
 
                 </ZoomableGroup>
             </ComposableMap>
-        </div >
+        </div>
 
     );
 };

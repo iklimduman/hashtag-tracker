@@ -7,7 +7,6 @@ const App = () => {
   const [content, setContent] = useState("");
   return (
     <div>
-    <p>Hello</p>
       <WorldMap setTooltipContent={setContent}/>
       <ReactTooltip>{content}</ReactTooltip>
     </div>
